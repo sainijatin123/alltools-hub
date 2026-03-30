@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>All Tools Hub</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: Arial;
+      background: #0f172a;
+      color: white;
+      text-align: center;
+    }
+    h1 {
+      margin-top: 20px;
+    }
+    .box {
+      background: #1e293b;
+      margin: 20px;
+      padding: 20px;
+      border-radius: 10px;
+    }
+    input, button {
+      padding: 10px;
+      margin: 10px;
+      border-radius: 5px;
+      border: none;
+    }
+    button {
+      background: #22c55e;
+      color: white;
+    }
+  </style>
+</head>
+
+<body>
+
+<h1>🔥 All Tools Hub</h1>
+
+<div class="box">
+  <h2>📄 Image to PDF</h2>
+  <input type="file" id="imageInput">
+  <button onclick="alert('PDF feature coming soon')">Convert</button>
+</div>
+
+<div class="box">
+  <h2>🔳 QR Generator</h2>
+  <input type="text" id="qrText" placeholder="Enter text">
+  <button onclick="generateQR()">Generate</button>
+  <br>
+  <img id="qrImage">
+</div>
+
+<div class="box">
+  <h2>✍️ Word Counter</h2>
+  <textarea id="text" rows="4" cols="30"></textarea><br>
+  <button onclick="countWords()">Count</button>
+  <p id="result"></p>
+</div>
+
+<script>
+function countWords() {
+  let text = document.getElementById("text").value;
+  let words = text.trim().split(/\s+/).length;
+  document.getElementById("result").innerText = "Words: " + words;
+}
+
+function generateQR() {
+  let text = document.getElementById("qrText").value;
+  document.getElementById("qrImage").src =
+  "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=" + text;
+}
+</script>
+
+</body>
+</html>

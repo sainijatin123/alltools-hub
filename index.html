@@ -3,6 +3,9 @@
 <head>
   <title>All Tools Hub</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
   <style>
     body {
       font-family: Arial;
@@ -10,16 +13,13 @@
       color: white;
       text-align: center;
     }
-    h1 {
-      margin-top: 20px;
-    }
     .box {
       background: #1e293b;
       margin: 20px;
       padding: 20px;
       border-radius: 10px;
     }
-    input, button {
+    input, button, textarea {
       padding: 10px;
       margin: 10px;
       border-radius: 5px;
@@ -28,6 +28,7 @@
     button {
       background: #22c55e;
       color: white;
+      cursor: pointer;
     }
   </style>
 </head>
@@ -36,12 +37,14 @@
 
 <h1>🔥 All Tools Hub</h1>
 
+<!-- IMAGE TO PDF -->
 <div class="box">
   <h2>📄 Image to PDF</h2>
   <input type="file" id="imageInput">
-  <button onclick="alert('PDF feature coming soon')">Convert</button>
+  <button onclick="convertToPDF()">Convert</button>
 </div>
 
+<!-- QR -->
 <div class="box">
   <h2>🔳 QR Generator</h2>
   <input type="text" id="qrText" placeholder="Enter text">
@@ -50,11 +53,37 @@
   <img id="qrImage">
 </div>
 
+<!-- WORD COUNTER -->
 <div class="box">
   <h2>✍️ Word Counter</h2>
-  <textarea id="text" rows="4" cols="30"></textarea><br>
+  <textarea id="text"></textarea><br>
   <button onclick="countWords()">Count</button>
   <p id="result"></p>
+</div>
+
+<!-- PASSWORD GENERATOR -->
+<div class="box">
+  <h2>🔐 Password Generator</h2>
+  <input type="number" id="passLength" placeholder="Length (8-20)">
+  <button onclick="generatePassword()">Generate</button>
+  <p id="password"></p>
+</div>
+
+<!-- NUMBER TO WORD -->
+<div class="box">
+  <h2>🔢 Number to Words</h2>
+  <input type="number" id="numberInput" placeholder="Enter number">
+  <button onclick="convertNumber()">Convert</button>
+  <p id="numberResult"></p>
+</div>
+
+<!-- TEXT CASE -->
+<div class="box">
+  <h2>📏 Text Case Converter</h2>
+  <textarea id="caseText"></textarea><br>
+  <button onclick="toUpper()">UPPER</button>
+  <button onclick="toLower()">lower</button>
+  <p id="caseResult"></p>
 </div>
 
 <script>
@@ -68,6 +97,49 @@ function generateQR() {
   let text = document.getElementById("qrText").value;
   document.getElementById("qrImage").src =
   "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=" + text;
+}
+
+function generatePassword() {
+  let length = document.getElementById("passLength").value || 10;
+  let chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$!";
+  let pass = "";
+  for (let i = 0; i < length; i++) {
+    pass += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  document.getElementById("password").innerText = pass;
+}
+
+function convertNumber() {
+  let num = document.getElementById("numberInput").value;
+  document.getElementById("numberResult").innerText = num + " (simple)";
+}
+
+function toUpper() {
+  let text = document.getElementById("caseText").value;
+  document.getElementById("caseResult").innerText = text.toUpperCase();
+}
+
+function toLower() {
+  let text = document.getElementById("caseText").value;
+  document.getElementById("caseResult").innerText = text.toLowerCase();
+}
+
+async function convertToPDF() {
+  const { jsPDF } = window.jspdf;
+  const file = document.getElementById("imageInput").files[0];
+
+  if (!file) {
+    alert("Select image");
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = function (e) {
+    const pdf = new jsPDF();
+    pdf.addImage(e.target.result, 'JPEG', 10, 10, 180, 160);
+    pdf.save("file.pdf");
+  };
+  reader.readAsDataURL(file);
 }
 </script>
 
